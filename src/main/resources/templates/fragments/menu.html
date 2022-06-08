@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <style>
+        .nut_dropdown {
+
+            color: white;
+            /*padding: 16px; */
+            font-size: 13px;
+            border: none;
+            margin:0px;
+        }
+        /* Thiết lập vị trí cho thẻ div với class dropdown*/
+        .dropdown {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+        }
+        /* Nội dung Dropdown */
+        .noidung_dropdown {
+            /*Ẩn nội dung các đường dẫn*/
+            display: none;
+            position: absolute;
+            right: 0px;
+            background-color: #f1f1f1;
+            min-width: 112px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        /* Thiết kế style cho các đường dẫn trong Dropdown */
+        .noidung_dropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* thay đổi màu background khi hover vào đường dẫn */
+        .noidung_dropdown a:hover {background-color: #ddd;}
+        /* hiển thị nội dung dropdown khi hover */
+        .dropdown:hover .noidung_dropdown {display: block;}
+        /* Thay đổi màu background cho nút khi được hover */
+        /* .dropdown:hover .nut_dropdown {background-color: #00bfff;} */
+    </style>
+</head>
+<body>
+<th:block th:fragment="menu">
+    <header class="app-header">
+        <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                        aria-label="Hide Sidebar"></a>
+        <!-- Navbar Right Menu-->
+        <ul class="app-nav" style="height:45px">
+
+
+            <!-- User Menu-->
+            <!-- <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a> -->
+            <li style="line-height: 45px;">
+                <div class="dropdown" >
+                    <p id="login-fullName" class="nut_dropdown" th:text="${userLoginedAdmin.fullName}+ ' ▾'">Chào, Trần ▾</p>
+                    <div class="noidung_dropdown">
+                        <a href="/admin/account"><i class="fa-solid fa-user"></i> Tài khoản</a>
+                        <a href="/admin/logout_admin.html"><i class="fas fa-sign-out-alt ml-0"></i> Đăng xuất</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </header>
+
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user">
+            <div>
+                <a href="/admin/home" style="color: white"><p class="app-sidebar__user-name" style="font-size: 35px;"><b>D.Perfume</b></p></a>
+<!--                <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>-->
+            </div>
+        </div>
+        <hr>
+        <ul class="app-menu">
+            <th:block th:if="${reportRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/dash'?'active':''}" href="/admin/dash"><i class="app-menu__icon fa-solid fa-gauge"></i><span class="app-menu__label">Xem thống kê</span></a></li>
+            </th:block>
+            <th:block th:if="${brandRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/brand'?'active':''}" href="/admin/brand"><i class="app-menu__icon fas fa-th-large"></i><span class="app-menu__label">Quản lý thương hiệu</span></a></li>
+            </th:block>
+            <th:block th:if="${productRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/product'?'active':''}" href="/admin/product"><i class="app-menu__icon fas fa-sitemap"></i><span class="app-menu__label">Quản lý sản phẩm</span></a></li>
+            </th:block>
+            <th:block th:if="${orderRole}">
+                <li><a class="app-menu__item " th:classappend="${#httpServletRequest.getRequestURI()=='/admin/order'?'active':''}" href="/admin/order"><i class="app-menu__icon fa-solid fa-money-bills"></i><span class="app-menu__label">Quản lý đơn hàng</span></a></li>
+            </th:block>
+            <th:block th:if="${newsRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/news'?'active':''}" href="/admin/news"><i class="app-menu__icon fa-solid fa-newspaper"></i><span class="app-menu__label">Quản lý tin tức</span></a></li>
+            </th:block>
+            <th:block th:if="${userRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/user'?'active':''}" href="/admin/user"><i class="app-menu__icon fa-solid fa-users"></i><span class="app-menu__label">Quản lý khách hàng</span></a></li>
+            </th:block>
+            <th:block th:if="${employeeRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/employee'?'active':''}" href="/admin/employee"><i class="app-menu__icon fa-solid fa-user-gear"></i><span class="app-menu__label">Quản lý nhân viên</span></a></li>
+            </th:block>
+            <th:block th:if="${contactRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/contact'?'active':''}" href="/admin/contact"><i class="app-menu__icon fa-solid fa-address-book"></i><span class="app-menu__label">Quản lý liên hệ</span></a></li>
+            </th:block>
+            <th:block th:if="${introduceRole}">
+                <li><a class="app-menu__item" th:classappend="${#httpServletRequest.getRequestURI()=='/admin/introduce'?'active':''}" href="/admin/introduce"><i class="app-menu__icon fa-solid fa-circle-info"></i><span class="app-menu__label">Quản lý giới thiệu </span></a></li>
+            </th:block>
+        </ul>
+    </aside>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết tin</title>
+    <th:block id="css-resources">
+        <style>
+            body {
+                background: #edf1f5;
+                margin-top: 20px;
+            }
+            .card {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                word-wrap: break-word;
+                background-color: #fff;
+                background-clip: border-box;
+                border: 0 solid transparent;
+                border-radius: 0;
+            }
+            .card {
+                margin-bottom: 30px;
+            }
+            .card-body {
+                flex: 1 1 auto;
+                padding: 1.57rem;
+            }
+
+            .note-has-grid .nav-link {
+                padding: 0.5rem;
+            }
+
+            .note-has-grid .single-note-item .card {
+                border-radius: 10px;
+            }
+
+            .note-has-grid .single-note-item .favourite-note {
+                cursor: pointer;
+            }
+
+            .note-has-grid .single-note-item .side-stick {
+                position: absolute;
+                width: 3px;
+                height: 35px;
+                left: 0;
+                /* background-color: rgba(82, 95, 127, 0.5); */
+                background-color:violet;
+            }
+
+            .note-has-grid
+            .single-note-item
+            .category-dropdown.dropdown-toggle:after {
+                display: none;
+            }
+
+            .note-has-grid .single-note-item .category [class*="category-"] {
+                height: 15px;
+                width: 15px;
+                display: none;
+            }
+
+            .note-has-grid .single-note-item .category [class*="category-"]::after {
+                content: "\f0d7";
+                font: normal normal normal 14px/1 FontAwesome;
+                font-size: 12px;
+                color: #fff;
+                position: absolute;
+            }
+
+            .note-has-grid .single-note-item .category .category-business {
+                background-color: rgba(44, 208, 126, 0.5);
+                border: 2px solid #2cd07e;
+            }
+
+            .note-has-grid .single-note-item .category .category-social {
+                background-color: rgba(44, 171, 227, 0.5);
+                border: 2px solid #2cabe3;
+            }
+
+            .note-has-grid .single-note-item .category .category-important {
+                background-color: rgba(255, 80, 80, 0.5);
+                border: 2px solid #ff5050;
+            }
+
+            .note-has-grid .single-note-item.all-category .point {
+                color: rgba(82, 95, 127, 0.5);
+            }
+
+            .note-has-grid .single-note-item.note-business .point {
+                color: rgba(44, 208, 126, 0.5);
+            }
+
+            .note-has-grid .single-note-item.note-business .side-stick {
+                background-color: rgba(44, 208, 126, 0.5);
+            }
+
+            .note-has-grid
+            .single-note-item.note-business
+            .category
+            .category-business {
+                display: inline-block;
+            }
+
+            .note-has-grid .single-note-item.note-favourite .favourite-note {
+                color: #ffc107;
+            }
+
+            .note-has-grid .single-note-item.note-social .point {
+                color: rgba(44, 171, 227, 0.5);
+            }
+
+            .note-has-grid .single-note-item.note-social .side-stick {
+                background-color: rgba(44, 171, 227, 0.5);
+            }
+
+            .note-has-grid .single-note-item.note-social .category .category-social {
+                display: inline-block;
+            }
+
+            .note-has-grid .single-note-item.note-important .point {
+                color: rgba(255, 80, 80, 0.5);
+            }
+
+            .note-has-grid .single-note-item.note-important .side-stick {
+                background-color: rgba(255, 80, 80, 0.5);
+            }
+
+            .note-has-grid
+            .single-note-item.note-important
+            .category
+            .category-important {
+                display: inline-block;
+            }
+
+            .note-has-grid .single-note-item.all-category .more-options,
+            .note-has-grid
+            .single-note-item.all-category.note-favourite
+            .more-options {
+                display: block;
+            }
+
+            .note-has-grid .single-note-item.all-category.note-business .more-options,
+            .note-has-grid
+            .single-note-item.all-category.note-favourite.note-business
+            .more-options,
+            .note-has-grid
+            .single-note-item.all-category.note-favourite.note-important
+            .more-options,
+            .note-has-grid
+            .single-note-item.all-category.note-favourite.note-social
+            .more-options,
+            .note-has-grid
+            .single-note-item.all-category.note-important
+            .more-options,
+            .note-has-grid .single-note-item.all-category.note-social .more-options {
+                display: none;
+            }
+
+            @media (max-width: 767.98px) {
+                .note-has-grid .single-note-item {
+                    max-width: 100%;
+                }
+            }
+
+            @media (max-width: 991.98px) {
+                .note-has-grid .single-note-item {
+                    /* max-width: 216px; */
+                    max-width: 100%;
+                }
+            }
+            /* .modal-dialog { z-index: 1040; } */
+            /* upload image*/
+            /* .filepond--item {
+          width: calc(50% - 0.5em);
+      } */
+            /* .filepond--root {
+                max-height: 20em;
+            } */
+
+
+            .addReadMore.showlesscontent .SecSec,
+            .addReadMore.showlesscontent .readLess {
+                display: none;
+            }
+
+            .addReadMore.showmorecontent .readMore {
+                display: none;
+            }
+
+            .addReadMore .readMore,
+            .addReadMore .readLess {
+                font-weight: bold;
+                margin-left: 2px;
+                color: blue;
+                cursor: pointer;
+            }
+
+            .addReadMoreWrapTxt.showmorecontent .SecSec,
+            .addReadMoreWrapTxt.showmorecontent .readLess {
+                display: block;
+            }
+
+            /*loading*/
+            .loader-div {
+                position: fixed;
+                top: 0;
+                left: 0;
+                /*background-color: #333;*/
+                background-color: rgb(0,0,0,0.6);
+                height: 100vh;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 100000000000;
+            }
+
+            .loader {
+                position: relative;
+                width: 10vw;
+                height: 5vw;
+                padding: 1.5vw;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .loader span {
+                position: absolute;
+                height: 0.8vw;
+                width: 0.8vw;
+                border-radius: 50%;
+                background-color: #ff0;
+            }
+
+            .loader span:nth-child(1) {
+                animation: loading-dotsA 2s infinite linear;
+            }
+
+            .loader span:nth-child(2) {
+                animation: loading-dotsB 2s infinite linear;
+            }
+
+            @keyframes loading-dotsA {
+                0% {
+                    transform: none;
+                }
+                25% {
+                    transform: translateX(2vw);
+                }
+                50% {
+                    transform: none;
+                }
+                75% {
+                    transform: translateY(2vw);
+                }
+                100% {
+                    transform: none;
+                }
+            }
+
+            @keyframes loading-dotsB {
+                0% {
+                    transform: none;
+                }
+                25% {
+                    transform: translateX(-2vw);
+                }
+                50% {
+                    transform: none;
+                }
+                75% {
+                    transform: translateY(-2vw);
+                }
+                100% {
+                    transform: none;
+                }
+            }
+        </style>
+    </th:block>
+</head>
+<body>
+<th:block id="main-content">
+    <div style="display: none" class="loader-div" id="loading-send">
+        <span class="loader">
+            <span></span>
+            <span></span>
+        </span>
+    </div>
+    <div class="heading-page header-text" style="text-align:center; border-bottom: 1px solid;margin:0 80px;">
+        <h4>Bài Viết</h4>
+    </div>
+
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="page-content container note-has-grid">
+
+                        <div class="d-flex mt-3">
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <th:block th:if="${type==true}">
+                                        <a onclick="clickTab(true)" class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Hiện thị</a>
+                                        <a onclick="clickTab(false)" class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-profile" aria-selected="false">Ẩn</a>
+                                    </th:block>
+                                    <th:block th:if="${type==false}">
+                                        <a onclick="clickTab(true)" class="nav-link" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Hiện thị</a>
+                                        <a onclick="clickTab(false)" class="nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-profile" aria-selected="false">Ẩn</a>
+                                    </th:block>
+                                </div>
+                            </nav>
+                            <span class="ml-auto text-nowrap border border-top-0 border-left-0 border-right-0" style="margin-top: 5px;">
+                  <button id="add-modal" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addnotesmodal">Thêm mới</button>
+                </span>
+                        </div>
+
+                        <!-- tab show list notes -->
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="tab-content" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                        <div class="tab-content bg-transparent">
+
+
+                                            <div id="note-full-container" class="note-has-grid row" style="margin-top:20px">
+
+                                                <!-- note1 -->
+                                                <th:block th:each="note:${lstNotes}">
+                                                <div class="col-md-4 single-note-item all-category">
+                                                    <div class="card card-body">
+                                                        <span class="side-stick"></span>
+<!--                                                        text-truncate w-75-->
+                                                        <h5 class="note-title w-100 mb-0" th:text="${note.title}"></h5>
+                                                        <p style="font-size: 13px" class="note-date font-12 text-muted" th:text="${#dates.format(note.createdDate, 'dd-MM-yyyy HH:mm:ss')}">11 March 2009</p>
+
+                                                        <div id="all-note" class="note-content">
+<!--                                                            <p class="note-inner-content text-muted" th:text="${note.content}"></p>-->
+<!--                                                            <div id="profile-description">-->
+<!--                                                                <div th:id="text+${note.id}" class="text show-more-height" th:text="${note.content}">-->
+
+<!--                                                                </div>-->
+<!--                                                                <div class="show-more" th:id="show-more+${note.id}" th:onclick="'showMore('+${note.id}+')'">Xem thêm</div>-->
+<!--                                                            </div>-->
+<!--                                                            <div>-->
+                                                                <p style="text-align: justify" class="note-inner-content text-muted addReadMore showlesscontent" th:text="${note.content}"></p>
+<!--                                                                class="note-inner-content text-muted"-->
+<!--                                                            </div>-->
+                                                        </div>
+
+
+                                                        <div class="d-flex align-items-center" style="margin-top: 10px;">
+                                                            <span class="mr-2" id="edit-note"><i class="fa fa-lg fa-pencil-square"></i></span>
+                                                            <span class="mr-2" id="delete-note"><i class="fa fa-lg fa-trash remove-note"></i></span>
+                                                            <span class="mr-2 ml-auto">
+                                                                <input type="checkbox" th:checked="${note.status==true}?checked" data-on="Hiện" data-off="Ẩn" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    </th:block>
+
+
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">b</div> -->
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        <!-- modal-dialog-centered -->
+                        <!-- Modal Add notes -->
+                        <div data-keyboard="false" data-backdrop="static" class="modal fade" id="addnotesmodal" tabindex="-1" role="dialog" aria-labelledby="addnotesmodalTitle" style="display: none; z-index: 9999999;" aria-hidden="true">
+                            <div class="modal-dialog" role="document" >
+                                <form method="post" action="/dn/add-notes" id="addNotes" enctype="multipart/form-data">
+                                <div class="modal-content border-0">
+                                    <div class="modal-header bg-info text-white">
+                                        <h5 id="title-modal" class="modal-title text-white">Thêm mới</h5>
+                                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="notes-box">
+                                            <div class="notes-content">
+
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group note-title">
+                                                                <!-- <label>Tiêu đề</label> -->
+                                                                <input type="text" id="note-title" class="form-control" placeholder="Tiêu đề" name="title"/>
+                                                                <span class="form-message"></span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="form-group note-description">
+                                                                <!-- <label>Nội dung</label> -->
+                                                                <textarea id="note-content" class="form-control" placeholder="Nội dung" rows="10" name="content"></textarea>
+                                                                <span class="form-message"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group note-title">
+                                                            <span class="ml-auto">
+                                                                <input id="toggle-state" type="checkbox" name="status" data-width="50" data-on="Hiện" data-off="Ẩn" checked data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs">
+                                                            </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group note-title">
+                                                                <!-- <label>Ảnh</label> -->
+                                                                <input id="file-note" type="file" class="my-pond" data-max-files="1" name="fileImage[]"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+<!--                                        <button id="btn-n-save" class="float-left btn btn-success" style="display: none;">Save</button>-->
+                                        <button class="btn btn-danger" data-dismiss="modal">Hủy</button>
+                                        <button type="submit" id="btn-n-add" class="btn btn-info">Lưu</button>
+                                    </div>
+
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <textarea id="content" class="form-control" placeholder="Nội dung" rows="10"></textarea> -->
+    </section>
+</th:block>
+<th:block id="js-resources">
+    <script th:inline="javascript">
+
+        function AddReadMore() {
+            //This limit you can set after how much characters you want to show Read More.
+            var carLmt = 65;
+            // Text to show when text is collapsed
+            var readMoreTxt = " ... Xem thêm";
+            // Text to show when text is expanded
+            var readLessTxt = " Thu gọn";
+
+
+            //Traverse all selectors with this class and manupulate HTML part to show Read More
+            $(".addReadMore").each(function() {
+                if ($(this).find(".firstSec").length)
+                    return;
+
+                var allstr = $(this).text();
+                if (allstr.length > carLmt) {
+                    var firstSet = allstr.substring(0, carLmt);
+                    var secdHalf = allstr.substring(carLmt, allstr.length);
+                    var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+                    $(this).html(strtoadd);
+                }
+
+            });
+            //Read More and Read Less Click Event binding
+            $(document).on("click", ".readMore,.readLess", function() {
+                $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+            });
+        }
+        $(function() {
+            //Calling function after Page Load
+            AddReadMore();
+        });
+
+
+
+
+
+
+
+        $( "#delete-note" ).click(function() {
+            confirm("Bạn có chắc muốn xóa");
+        });
+        $( "#edit-note" ).click(function() {
+            $('#title-modal').text("Cập nhật");
+            $('#addnotesmodal').modal('show');
+        });
+        $( "#add-modal" ).click(function() {
+            $('#title-modal').text("Thêm mới");
+
+        });
+
+        // $(".modal").removeAttr("tabindex");
+        // upload image
+        // $(function(){
+        //
+        //     // First register any plugins
+        //     $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+        //
+        //     // Turn input element into a pond
+        //     $('.my-pond').filepond();
+        //
+        //     // Set allowMultiple property to true
+        //     $('.my-pond').filepond('allowMultiple', true);
+        //
+        //     // Listen for addfile event
+        //     $('.my-pond').on('FilePond:addfile', function(e) {
+        //         console.log('file added event', e);
+        //     });
+        //
+        //     // Manually add a file using the addfile method
+        //     // $('.my-pond').first().filepond('addFile', 'index.html').then(function(file){
+        //     //   console.log('file added', file);
+        //     // });
+        //
+        // });
+
+        function clickTab(status){
+            $(location).attr('href', "/dn/notes?status="+status);
+        }
+
+        var pond;
+        $(document).ready(function(e){
+            // showNote(true);
+
+            $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+            pond = FilePond.create(
+                document.querySelector('#file-note'), {
+                    allowMultiple: true,
+                    instantUpload: false,
+                    allowProcess: false
+                });
+            // $('.my-pond').first().filepond('addFile', 'https://drive.google.com/file/d/1iga80taaQckdQl8eYazHsiX6vMYvmhcn/view?usp=drivesdk').then(function(file){
+            //       console.log('file added', file);
+            //     });
+            $('#all-note').readmore({speed: 500});
+        });
+
+        //Thêm mới or cập nhật
+        Validator({
+            form: '#addNotes',
+            errorSelector: '.form-message',
+            rules: [
+                Validator.isRequired('#note-title'),
+                Validator.isRequired('#note-content'),
+            ],
+            onSubmit: function (form1) {
+                $('#loading-send').show();
+                var form = $('#addNotes')[0];
+                var data = new FormData(form);
+                data.set('status',document.getElementById('toggle-state').checked);
+                var pondFiles = pond.getFiles();
+                // var type=data.get('status');
+                var type=document.getElementById('toggle-state').checked;
+                for (var i = 0; i < pondFiles.length; i++) {
+                    // append the blob file
+                    data.append('fileImage[]', pondFiles[i].file);
+                }
+                // data.set('fileImage',pondFiles);
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "/dn/add-notes",
+                    data: data,
+                    processData: false, //prevent jQuery from automatically transforming the data into a query string
+                    contentType: false,
+                    cache: false,
+                    // timeout: 600000,
+                    success: function (result) {
+                        $('#loading-send').hide();
+                        $(location).attr('href', "/dn/notes?status="+type);
+                        // if(result.message==true){
+                        //     messageSuccess('', 'Thành công.');
+                        //     $(location).attr('href', "/dn/notes?status="+type);
+                        // }
+                        // if(result.message==false){
+                        //     messageError('','Lỗi hệ thống.')
+                        // }
+                    },
+                    error: function (e) {
+                        $('#loading-send').hide();
+                        messageError('Thất bại!','Lỗi hệ thống.')
+                        console.log("ERROR : ", e);
+                    }
+                });
+            }
+        });
+
+        // function formatDate(dateTime){
+        //     var date = new Date(dateTime);
+        //     var dateStr =
+        //         ("00" + date.getDate()).slice(-2) + "/" +
+        //         ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+        //         date.getFullYear() + " " +
+        //         ("00" + date.getHours()).slice(-2) + ":" +
+        //         ("00" + date.getMinutes()).slice(-2) + ":" +
+        //         ("00" + date.getSeconds()).slice(-2);
+        //     return dateStr;
+        // }
+
+        // function subString(text,length){
+        //     return text.substring(0,length);
+        // }
+
+        //Load dữ liệu
+        // function showNote(status) {
+        //     $.ajax({
+        //         type : "GET",
+        //         contentType : "application/json",
+        //         url : "/dn/get-notes",
+        //         data : {
+        //             status:status,
+        //         },
+        //         dataType : 'json',
+        //         // timeout : 100000,
+        //         success : function(data) {
+        //             var html='';
+        //             $.each(data,function (i,item){
+        //                 var check='';
+        //                 if(item.status==true){
+        //                     check='checked';
+        //                 }
+        //                 html+=
+        //                     '<div class="col-md-4 single-note-item all-category">'+
+        //                         '<div class="card card-body">'+
+        //                             '<span class="side-stick"></span>'+
+        //                             '<h5 class="note-title text-truncate w-75 mb-0">'+item.title+'</h5>'+
+        //                             '<p class="note-date font-12 text-muted">'+formatDate(item.createdDate)+'</p>'+
+        //                             '<div class="note-content">'+
+        //                                 '<p class="note-inner-content text-muted">'+subString(item.content,160)+'...'+'</p>'+
+        //                             '</div>'+
+        //                             '<div class="d-flex align-items-center" style="margin-top: 10px;">'+
+        //                                 '<span class="mr-2" id="edit-note"><i class="fa fa-lg fa-pencil-square"></i></span>'+
+        //                                 '<span class="mr-2" id="delete-note"><i class="fa fa-lg fa-trash remove-note"></i></span>'+
+        //                                 '<span class="mr-2 ml-auto">'+
+        //                                     '<input type="checkbox" data-on="Hiện" data-off="Ẩn" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs" '+check+'>'+
+        //                                 '</span>'+
+        //                             '</div>'+
+        //                         '</div>'+
+        //                     '</div>';
+        //
+        //             })
+        //             $('#note-full-container').append(html);
+        //         },
+        //         error : function(e) {
+        //             console.log("ERROR: ", e);
+        //         }
+        //     });
+        // }
+    </script>
+</th:block>
+</body>
+</html>
