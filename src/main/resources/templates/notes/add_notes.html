@@ -8,7 +8,7 @@
                                                )}">
 <head>
     <meta charset="UTF-8">
-    <title>Chi tiết tin</title>
+    <title>Quản lý bài viết</title>
     <th:block id="css-resources">
         <style>
             body {
@@ -284,6 +284,7 @@
                     transform: none;
                 }
             }
+
         </style>
     </th:block>
 </head>
@@ -296,7 +297,7 @@
         </span>
     </div>
     <div class="heading-page header-text" style="text-align:center; border-bottom: 1px solid;margin:0 80px;">
-        <h4>Bài Viết</h4>
+        <h4>Quản lý bài viết</h4>
     </div>
 
 
@@ -321,10 +322,14 @@
                                 </div>
                             </nav>
                             <span class="ml-auto text-nowrap border border-top-0 border-left-0 border-right-0" style="margin-top: 5px;">
-                  <button id="add-modal" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addnotesmodal">Thêm mới</button>
+                  <button id="add-modal" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#addnotesmodal" onclick="removeText()">Thêm mới</button>
                 </span>
                         </div>
-
+                        <th:block th:if="${type==false && size!=0}">
+                        <span id="btn-show-note" class="mr-2 ml-auto">
+                            <button style="margin-top:10px;margin-left:8px" onclick="showAllNote()" type="button" class="btn btn-info btn-sm">Hiện tất cả</button>
+                        </span>
+                        </th:block>
                         <!-- tab show list notes -->
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -337,7 +342,7 @@
 
                                                 <!-- note1 -->
                                                 <th:block th:each="note:${lstNotes}">
-                                                <div class="col-md-4 single-note-item all-category">
+                                                <div th:id="dnnote+${note.id}" class="col-md-4 single-note-item all-category">
                                                     <div class="card card-body">
                                                         <span class="side-stick"></span>
 <!--                                                        text-truncate w-75-->
@@ -345,25 +350,23 @@
                                                         <p style="font-size: 13px" class="note-date font-12 text-muted" th:text="${#dates.format(note.createdDate, 'dd-MM-yyyy HH:mm:ss')}">11 March 2009</p>
 
                                                         <div id="all-note" class="note-content">
-<!--                                                            <p class="note-inner-content text-muted" th:text="${note.content}"></p>-->
-<!--                                                            <div id="profile-description">-->
-<!--                                                                <div th:id="text+${note.id}" class="text show-more-height" th:text="${note.content}">-->
-
-<!--                                                                </div>-->
-<!--                                                                <div class="show-more" th:id="show-more+${note.id}" th:onclick="'showMore('+${note.id}+')'">Xem thêm</div>-->
-<!--                                                            </div>-->
-<!--                                                            <div>-->
-                                                                <p style="text-align: justify" class="note-inner-content text-muted addReadMore showlesscontent" th:text="${note.content}"></p>
-<!--                                                                class="note-inner-content text-muted"-->
-<!--                                                            </div>-->
+                                                                <div style="text-align: justify" class="note-inner-content text-muted addReadMore showlesscontent" th:text="${#strings.replace(note.content,newLineChar, '&lt;br /&gt;')}"></div>
+<!--                                                            ${#strings.replace(note.content,newLineChar, '&lt;br /&gt;')}-->
+<!--                                                                <input type="hidden" id="id-test" th:value="${note.id}">-->
+<!--                                                                <input type="hidden" id="content-test" th:value="${note.content}">-->
+<!--                                                            <script>-->
+<!--                                                                var id=document.getElementById('id-test').val();-->
+<!--                                                                var content=document.getElementById('content-test').val();-->
+<!--                                                                document.getElementById('demo'+id).innerHTML(content);-->
+<!--                                                            </script>-->
                                                         </div>
 
 
                                                         <div class="d-flex align-items-center" style="margin-top: 10px;">
-                                                            <span class="mr-2" id="edit-note"><i class="fa fa-lg fa-pencil-square"></i></span>
-                                                            <span class="mr-2" id="delete-note"><i class="fa fa-lg fa-trash remove-note"></i></span>
+                                                            <span th:attr="title=${note.title},content=${note.content}" th:onclick="|updateNote(${note.id},this.getAttribute('title'),this.getAttribute('content'))|" class="mr-2"><i class="fa fa-lg fa-pencil-square"></i></span>
+                                                            <span class="mr-2" th:onclick="|deleteNote(${note.id})|"><i class="fa fa-lg fa-trash remove-note"></i></span>
                                                             <span class="mr-2 ml-auto">
-                                                                <input type="checkbox" th:checked="${note.status==true}?checked" data-on="Hiện" data-off="Ẩn" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs">
+                                                                <input type="checkbox" th:id="statusNote+${note.id}" th:onchange="|updateStatus(${note.id})|" th:checked="${note.status==true}?checked" data-on="Hiện" data-off="Ẩn" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs">
                                                             </span>
                                                         </div>
                                                     </div>
@@ -372,8 +375,6 @@
 
 
                                             </div>
-
-
 
 
                                         </div>
@@ -410,6 +411,7 @@
 
                                                     <div class="row">
                                                         <div class="col-md-12">
+                                                            <input type="hidden" id="note-id" name="id"/>
                                                             <div class="form-group note-title">
                                                                 <!-- <label>Tiêu đề</label> -->
                                                                 <input type="text" id="note-title" class="form-control" placeholder="Tiêu đề" name="title"/>
@@ -429,12 +431,6 @@
                                                             <span class="ml-auto">
                                                                 <input id="toggle-state" type="checkbox" name="status" data-width="50" data-on="Hiện" data-off="Ẩn" checked data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs">
                                                             </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div class="form-group note-title">
-                                                                <!-- <label>Ảnh</label> -->
-                                                                <input id="file-note" type="file" class="my-pond" data-max-files="1" name="fileImage[]"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -461,6 +457,10 @@
 </th:block>
 <th:block id="js-resources">
     <script th:inline="javascript">
+        $(document).ready(function() {
+
+        });
+
 
         function AddReadMore() {
             //This limit you can set after how much characters you want to show Read More.
@@ -495,69 +495,15 @@
             AddReadMore();
         });
 
-
-
-
-
-
-
-        $( "#delete-note" ).click(function() {
-            confirm("Bạn có chắc muốn xóa");
-        });
-        $( "#edit-note" ).click(function() {
-            $('#title-modal').text("Cập nhật");
-            $('#addnotesmodal').modal('show');
-        });
-        $( "#add-modal" ).click(function() {
-            $('#title-modal').text("Thêm mới");
-
-        });
-
-        // $(".modal").removeAttr("tabindex");
-        // upload image
-        // $(function(){
-        //
-        //     // First register any plugins
-        //     $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
-        //
-        //     // Turn input element into a pond
-        //     $('.my-pond').filepond();
-        //
-        //     // Set allowMultiple property to true
-        //     $('.my-pond').filepond('allowMultiple', true);
-        //
-        //     // Listen for addfile event
-        //     $('.my-pond').on('FilePond:addfile', function(e) {
-        //         console.log('file added event', e);
-        //     });
-        //
-        //     // Manually add a file using the addfile method
-        //     // $('.my-pond').first().filepond('addFile', 'index.html').then(function(file){
-        //     //   console.log('file added', file);
-        //     // });
-        //
+        // var editor = new FroalaEditor('#note-content',{
+        //     placeholderText: 'Nhập nội dung...',
+        //     height: 200,
         // });
 
+        //Thay đổi các tab
         function clickTab(status){
             $(location).attr('href', "/dn/notes?status="+status);
         }
-
-        var pond;
-        $(document).ready(function(e){
-            // showNote(true);
-
-            $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
-            pond = FilePond.create(
-                document.querySelector('#file-note'), {
-                    allowMultiple: true,
-                    instantUpload: false,
-                    allowProcess: false
-                });
-            // $('.my-pond').first().filepond('addFile', 'https://drive.google.com/file/d/1iga80taaQckdQl8eYazHsiX6vMYvmhcn/view?usp=drivesdk').then(function(file){
-            //       console.log('file added', file);
-            //     });
-            $('#all-note').readmore({speed: 500});
-        });
 
         //Thêm mới or cập nhật
         Validator({
@@ -571,15 +517,9 @@
                 $('#loading-send').show();
                 var form = $('#addNotes')[0];
                 var data = new FormData(form);
+                // data.set('content',data.get('content').replace(/\n/g, "<br>"));
                 data.set('status',document.getElementById('toggle-state').checked);
-                var pondFiles = pond.getFiles();
-                // var type=data.get('status');
                 var type=document.getElementById('toggle-state').checked;
-                for (var i = 0; i < pondFiles.length; i++) {
-                    // append the blob file
-                    data.append('fileImage[]', pondFiles[i].file);
-                }
-                // data.set('fileImage',pondFiles);
                 $.ajax({
                     type: "POST",
                     enctype: 'multipart/form-data',
@@ -590,25 +530,129 @@
                     cache: false,
                     // timeout: 600000,
                     success: function (result) {
+                        $('#addnotesmodal').modal('hide');
                         $('#loading-send').hide();
+                        removeText();
                         $(location).attr('href', "/dn/notes?status="+type);
-                        // if(result.message==true){
-                        //     messageSuccess('', 'Thành công.');
-                        //     $(location).attr('href', "/dn/notes?status="+type);
-                        // }
-                        // if(result.message==false){
-                        //     messageError('','Lỗi hệ thống.')
-                        // }
                     },
                     error: function (e) {
                         $('#loading-send').hide();
-                        messageError('Thất bại!','Lỗi hệ thống.')
+                        alert('Lỗi hệ thống.')
                         console.log("ERROR : ", e);
                     }
                 });
             }
         });
 
+        function removeText(){
+            $('#note-id').val('');
+            $('#note-title').val('');
+            $('#note-content').val('');
+            $('.form-group').removeClass('invalid');
+            $('.form-message').text('');
+        }
+        function updateNote(id,title,content){
+            $('.form-group').removeClass('invalid');
+            $('.form-message').text('');
+            $('#title-modal').text("Cập nhật");
+            $('#addnotesmodal').modal('show');
+            $('#note-id').val(id);
+            $('#note-title').val(title);
+            $('#note-content').val(content);
+        }
+
+        function deleteNote(id){
+            var result = confirm("Bạn có chắc muốn xóa?");
+            if(result)  {
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "/dn/delete-notes",
+                    data: {
+                        id:id,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if(data.message==true){
+                            $('#dnnote'+id).remove();
+                            if($('#note-full-container').children().length==0){
+                                $('#btn-show-note').remove();
+                            }
+                        }
+                        if(data.message==false){
+                            alert('Lỗi hệ thống');
+                        }
+                    },
+                    error: function (e) {
+                        alert('Lỗi hệ thống');
+                        console.log("ERROR : ", e);
+                    }
+                });
+            }
+        }
+
+        function updateStatus(id){
+            var status=document.getElementById('statusNote'+id).checked;
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/dn/update-notes",
+                data: {
+                    id:id,
+                    status:status,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.message==true){
+                        $('#dnnote'+id).remove();
+                        if($('#note-full-container').children().length==0){
+                            $('#btn-show-note').remove();
+                        }
+                    }
+                    if(data.message==false){
+                        if(status==true)
+                            $(location).attr('href', "/dn/notes?status=false");
+                        else
+                            $(location).attr('href', "/dn/notes?status=true");
+                        alert('Lỗi hệ thống');
+                    }
+                },
+                error: function (e) {
+                    if(status==true)
+                        $(location).attr('href', "/dn/notes?status=false");
+                    else
+                        $(location).attr('href', "/dn/notes?status=true");
+                    alert('Lỗi hệ thống');
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
+
+        function showAllNote(){
+            var result = confirm("Bạn có chắc muốn hiển thị tất cả?");
+            if(result) {
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: "/dn/show-notes",
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.message == true) {
+                            $('#btn-show-note').remove();
+                            $('#note-full-container').empty();
+                        }
+                        if (data.message == false) {
+                            alert('Lỗi hệ thống');
+                        }
+                    },
+                    error: function (e) {
+                        alert('Lỗi hệ thống');
+                        console.log("ERROR : ", e);
+                    }
+                });
+            }
+        }
         // function formatDate(dateTime){
         //     var date = new Date(dateTime);
         //     var dateStr =

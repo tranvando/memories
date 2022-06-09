@@ -1,7 +1,5 @@
 package com.dotv.memories.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.sql.Timestamp;
 
 public class NotesDTO {
@@ -9,12 +7,9 @@ public class NotesDTO {
     private Integer idAcc;
     private String title;
     private String content;
-    private String image;
-    private String viewImage;
     private java.sql.Timestamp createdDate;
-    private java.sql.Timestamp updatedDate;
+    private Boolean statusHide;
     private Boolean status;
-    private MultipartFile fileImage[];
 
     public Integer getId() {
         return id;
@@ -56,14 +51,6 @@ public class NotesDTO {
         this.createdDate = createdDate;
     }
 
-    public String getImage() {
-        return this.image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public Boolean getStatus() {
         return this.status;
     }
@@ -72,27 +59,11 @@ public class NotesDTO {
         this.status = status;
     }
 
-    public Timestamp getUpdatedDate() {
-        return updatedDate;
+    public Boolean getStatusHide() {
+        return statusHide;
     }
 
-    public void setUpdatedDate(Timestamp updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public MultipartFile[] getFileImage() {
-        return fileImage;
-    }
-
-    public void setFileImage(MultipartFile[] fileImage) {
-        this.fileImage = fileImage;
-    }
-
-    public String getViewImage() {
-        return viewImage;
-    }
-
-    public void setViewImage(String viewImage) {
-        this.viewImage = viewImage;
+    public void setStatusHide(Boolean statusHide) {
+        this.statusHide = statusHide;
     }
 }
