@@ -23,6 +23,9 @@ public class Notes {
     @Column(name = "created_date")
     private java.sql.Timestamp createdDate;
 
+    @Column(name = "show_date")
+    private java.sql.Timestamp showDate;
+
     @Column(name = "status_hide")
     private Boolean statusHide;
 
@@ -83,5 +86,13 @@ public class Notes {
 
     public void setStatusHide(Boolean statusHide) {
         this.statusHide = statusHide;
+    }
+
+    public Timestamp getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(Timestamp showDate) {
+        this.showDate = showDate;
     }
 }

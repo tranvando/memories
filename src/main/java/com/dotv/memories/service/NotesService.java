@@ -1,5 +1,6 @@
 package com.dotv.memories.service;
 
+import com.dotv.memories.dto.NotesAllDTO;
 import com.dotv.memories.dto.NotesDTO;
 import com.dotv.memories.entity.Notes;
 
@@ -11,4 +12,5 @@ public interface NotesService {
     Boolean deleteNote(int id);
     Boolean updateStatus(int id,Boolean status);
     Boolean showAllNote() throws Exception;
+    List<NotesAllDTO> getAllNoteByType(int type) throws Exception;
 }

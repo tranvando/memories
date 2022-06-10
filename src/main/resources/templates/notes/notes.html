@@ -8,7 +8,32 @@
                                                )}">
 <head>
     <meta charset="UTF-8">
-    <title>Trang chủ</title>
+    <title>Bài viết</title>
+    <th:block id="css-resources">
+    <style>
+        .addReadMore.showlesscontent .SecSec,
+        .addReadMore.showlesscontent .readLess {
+            display: none;
+        }
+
+        .addReadMore.showmorecontent .readMore {
+            display: none;
+        }
+
+        .addReadMore .readMore,
+        .addReadMore .readLess {
+            font-weight: bold;
+            margin-left: 2px;
+            color: blue;
+            cursor: pointer;
+        }
+
+        .addReadMoreWrapTxt.showmorecontent .SecSec,
+        .addReadMoreWrapTxt.showmorecontent .readLess {
+            display: block;
+        }
+    </style>
+    </th:block>
 </head>
 <body>
 <th:block id="main-content">
@@ -16,174 +41,33 @@
     <br>
     <section class="blog-posts grid-system">
         <div class="container">
+            <select id="input-sort" style="font-weight: 500" class="form-select" aria-label="Chọn loại bài viết">
+                <option value="1">Tất cả bài viết</option>
+                <option value="2">Bài viết của bạn bè</option>
+                <option value="3">Bài viết từng ẩn của bạn bè</option>
+                <option value="4">Bài viết của bạn</option>
+                <option value="5">Bài viết từng ẩn của bạn</option>
+            </select>
+            <br>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="all-blog-posts">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="blog-post">
-                                    <div class="blog-thumb">
-                                        <img src="assets/images/blog-thumb-01.jpg" alt="">
-                                    </div>
-                                    <div class="down-content">
-                                        <!-- <span>Lifestyle</span> -->
-                                        <a href="post-details.html"><h4>Donec tincidunt leo</h4></a>
-                                        <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">May 31, 2020</a></li>
-                                            <li><a href="#">12 Comments</a></li>
-                                        </ul>
-                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
-                                        <div class="post-options">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <ul class="post-tags">
-                                                        <li><i class="fa fa-tags"></i></li>
-                                                        <li><a href="#">Best Templates</a>,</li>
-                                                        <li><a href="#">TemplateMo</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="blog-post">
-                                    <div class="down-content">
-                                        <span>Lifestyle</span>
-                                        <a href="post-details.html"><h4>Suspendisse et metus</h4></a>
-                                        <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">May 22, 2020</a></li>
-                                            <li><a href="#">26 Comments</a></li>
-                                        </ul>
-                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
-                                        <div class="post-options">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <ul class="post-tags">
-                                                        <li><i class="fa fa-tags"></i></li>
-                                                        <li><a href="#">Best Templates</a>,</li>
-                                                        <li><a href="#">TemplateMo</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="blog-post">
-                                    <div class="down-content">
-                                        <span>Lifestyle</span>
-                                        <a href="post-details.html"><h4>Donec tincidunt leo</h4></a>
-                                        <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">May 18, 2020</a></li>
-                                            <li><a href="#">42 Comments</a></li>
-                                        </ul>
-                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
-                                        <div class="post-options">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <ul class="post-tags">
-                                                        <li><i class="fa fa-tags"></i></li>
-                                                        <li><a href="#">Best Templates</a>,</li>
-                                                        <li><a href="#">TemplateMo</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="blog-post">
-                                    <div class="down-content">
-                                        <span>Lifestyle</span>
-                                        <a href="post-details.html"><h4>Mauris ac dolor ornare</h4></a>
-                                        <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">May 16, 2020</a></li>
-                                            <li><a href="#">28 Comments</a></li>
-                                        </ul>
-                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
-                                        <div class="post-options">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <ul class="post-tags">
-                                                        <li><i class="fa fa-tags"></i></li>
-                                                        <li><a href="#">Best Templates</a>,</li>
-                                                        <li><a href="#">TemplateMo</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="blog-post">
-                                    <div class="down-content">
-                                        <span>Lifestyle</span>
-                                        <a href="post-details.html"><h4>Donec tincidunt leo</h4></a>
-                                        <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">May 12, 2020</a></li>
-                                            <li><a href="#">16 Comments</a></li>
-                                        </ul>
-                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
-                                        <div class="post-options">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <ul class="post-tags">
-                                                        <li><i class="fa fa-tags"></i></li>
-                                                        <li><a href="#">Best Templates</a>,</li>
-                                                        <li><a href="#">TemplateMo</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="blog-post">
-                                    <div class="blog-thumb">
-                                        <img src="assets/images/blog-thumb-06.jpg" alt="">
-                                    </div>
-                                    <div class="down-content">
-                                        <span>Lifestyle</span>
-                                        <a href="post-details.html"><h4>Mauris ac dolor ornare</h4></a>
-                                        <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">May 10, 2020</a></li>
-                                            <li><a href="#">3 Comments</a></li>
-                                        </ul>
-                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
-                                        <div class="post-options">
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <ul class="post-tags">
-                                                        <li><i class="fa fa-tags"></i></li>
-                                                        <li><a href="#">Best Templates</a>,</li>
-                                                        <li><a href="#">TemplateMo</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <ul class="page-numbers">
-                                    <li><a href="#">1</a></li>
-                                    <li class="active"><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
-                                </ul>
-                            </div>
+                        <div id="all-notes" class="row">
+
+<!--                            <div class="col-lg-6">-->
+<!--                                <div class="blog-post">-->
+<!--                                    <div class="down-content">-->
+<!--                                        <a><h4>Donec tincidunt leo</h4></a>-->
+<!--                                        <ul class="post-info">-->
+<!--                                            <li><a>Admin</a></li>-->
+<!--                                            <li><a>May 31, 2020</a></li>-->
+<!--                                            <li><a>12 Comments</a></li>-->
+<!--                                        </ul>-->
+<!--                                        <p style="text-align: justify" class="addReadMore showlesscontent">Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
                         </div>
                     </div>
                 </div>
@@ -194,6 +78,103 @@
 </th:block>
 <th:block id="js-resources">
     <script th:inline="javascript">
+        function AddReadMore() {
+            //This limit you can set after how much characters you want to show Read More.
+            var carLmt = 100;
+            // Text to show when text is collapsed
+            var readMoreTxt = " ... Xem thêm";
+            // Text to show when text is expanded
+            var readLessTxt = " Thu gọn";
+
+
+            //Traverse all selectors with this class and manupulate HTML part to show Read More
+            $(".addReadMore").each(function() {
+                if ($(this).find(".firstSec").length)
+                    return;
+
+                var allstr = $(this).text();
+                if (allstr.length > carLmt) {
+                    var firstSet = allstr.substring(0, carLmt);
+                    var secdHalf = allstr.substring(carLmt, allstr.length);
+                    var strtoadd = firstSet + "<span class='SecSec'>" + secdHalf + "</span><span class='readMore'  title='Click to Show More'>" + readMoreTxt + "</span><span class='readLess' title='Click to Show Less'>" + readLessTxt + "</span>";
+                    $(this).html(strtoadd);
+                }
+
+            });
+            //Read More and Read Less Click Event binding
+            $(document).on("click", ".readMore,.readLess", function() {
+                $(this).closest(".addReadMore").toggleClass("showlesscontent showmorecontent");
+            });
+        }
+
+        $(function() {
+            //Calling function after Page Load
+            // AddReadMore();
+            showNote(1);
+        });
+
+        // $(document).ready(function() {
+        //     showNote(1);
+        //     AddReadMore();
+        // });
+        // showNote(1);
+
+        function formatDate(dateTime){
+            var date = new Date(dateTime);
+            var dateStr =
+                ("00" + date.getDate()).slice(-2) + "/" +
+                ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+                date.getFullYear() + " " +
+                ("00" + date.getHours()).slice(-2) + ":" +
+                ("00" + date.getMinutes()).slice(-2);
+                // + ":" +
+                // ("00" + date.getSeconds()).slice(-2);
+            return dateStr;
+        }
+        //Load dữ liệu
+        function showNote(type) {
+            $.ajax({
+                type : "GET",
+                contentType : "application/json",
+                url : "/dn/get-all-notes",
+                data : {
+                    type:type,
+                },
+                dataType : 'json',
+                success : function(data) {
+                    var html='';
+                    $.each(data,function (i,item){
+                        html+=
+                            '<div class="col-lg-6">'+
+                                '<div class="blog-post">'+
+                                    '<div class="down-content">'+
+                                        '<a><h4>'+item.title+'</h4></a>'+
+                                        '<ul class="post-info">'+
+                                            '<li><a>'+item.fullName+'</a></li>';
+                                        if(type==1||type==2||type==4)
+                                            html+='<li><a>'+formatDate(item.createdDate)+'</a></li>';
+                                        if(type==3||type==5)
+                                            html+=  '<li><a>Tạo:'+formatDate(item.createdDate)+'</a></li>'+
+                                                    '<li><a>Hiện:'+formatDate(item.showDate)+'</a></li>';
+                                        html+='</ul>'+
+                                        '<p style="text-align: justify" class="addReadMore showlesscontent" th:>'+item.content.replace(/\n/g,"<br>")+'</p>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>';
+                    })
+                    $('#all-notes').html(html);
+                    AddReadMore();
+                },
+                error : function(e) {
+                    alert("Lỗi hệ thống");
+                    console.log("ERROR: ", e);
+                }
+            });
+        }
+
+        $("#input-sort").change(function () {
+            showNote(this.value);
+        });
 
     </script>
 </th:block>

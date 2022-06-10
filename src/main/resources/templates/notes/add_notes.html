@@ -363,7 +363,7 @@
 
 
                                                         <div class="d-flex align-items-center" style="margin-top: 10px;">
-                                                            <span th:attr="title=${note.title},content=${note.content}" th:onclick="|updateNote(${note.id},this.getAttribute('title'),this.getAttribute('content'))|" class="mr-2"><i class="fa fa-lg fa-pencil-square"></i></span>
+                                                            <span th:attr="title=${note.title},content=${note.content}" th:onclick="|updateNote(${note.id},this.getAttribute('title'),this.getAttribute('content'),${note.status})|" class="mr-2"><i class="fa fa-lg fa-pencil-square"></i></span>
                                                             <span class="mr-2" th:onclick="|deleteNote(${note.id})|"><i class="fa fa-lg fa-trash remove-note"></i></span>
                                                             <span class="mr-2 ml-auto">
                                                                 <input type="checkbox" th:id="statusNote+${note.id}" th:onchange="|updateStatus(${note.id})|" th:checked="${note.status==true}?checked" data-on="Hiện" data-off="Ẩn" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs">
@@ -551,7 +551,7 @@
             $('.form-group').removeClass('invalid');
             $('.form-message').text('');
         }
-        function updateNote(id,title,content){
+        function updateNote(id,title,content,status){
             $('.form-group').removeClass('invalid');
             $('.form-message').text('');
             $('#title-modal').text("Cập nhật");
@@ -559,6 +559,7 @@
             $('#note-id').val(id);
             $('#note-title').val(title);
             $('#note-content').val(content);
+            $('#toggle-state').prop('checked',status).change();
         }
 
         function deleteNote(id){
@@ -653,67 +654,7 @@
                 });
             }
         }
-        // function formatDate(dateTime){
-        //     var date = new Date(dateTime);
-        //     var dateStr =
-        //         ("00" + date.getDate()).slice(-2) + "/" +
-        //         ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
-        //         date.getFullYear() + " " +
-        //         ("00" + date.getHours()).slice(-2) + ":" +
-        //         ("00" + date.getMinutes()).slice(-2) + ":" +
-        //         ("00" + date.getSeconds()).slice(-2);
-        //     return dateStr;
-        // }
 
-        // function subString(text,length){
-        //     return text.substring(0,length);
-        // }
-
-        //Load dữ liệu
-        // function showNote(status) {
-        //     $.ajax({
-        //         type : "GET",
-        //         contentType : "application/json",
-        //         url : "/dn/get-notes",
-        //         data : {
-        //             status:status,
-        //         },
-        //         dataType : 'json',
-        //         // timeout : 100000,
-        //         success : function(data) {
-        //             var html='';
-        //             $.each(data,function (i,item){
-        //                 var check='';
-        //                 if(item.status==true){
-        //                     check='checked';
-        //                 }
-        //                 html+=
-        //                     '<div class="col-md-4 single-note-item all-category">'+
-        //                         '<div class="card card-body">'+
-        //                             '<span class="side-stick"></span>'+
-        //                             '<h5 class="note-title text-truncate w-75 mb-0">'+item.title+'</h5>'+
-        //                             '<p class="note-date font-12 text-muted">'+formatDate(item.createdDate)+'</p>'+
-        //                             '<div class="note-content">'+
-        //                                 '<p class="note-inner-content text-muted">'+subString(item.content,160)+'...'+'</p>'+
-        //                             '</div>'+
-        //                             '<div class="d-flex align-items-center" style="margin-top: 10px;">'+
-        //                                 '<span class="mr-2" id="edit-note"><i class="fa fa-lg fa-pencil-square"></i></span>'+
-        //                                 '<span class="mr-2" id="delete-note"><i class="fa fa-lg fa-trash remove-note"></i></span>'+
-        //                                 '<span class="mr-2 ml-auto">'+
-        //                                     '<input type="checkbox" data-on="Hiện" data-off="Ẩn" data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="xs" '+check+'>'+
-        //                                 '</span>'+
-        //                             '</div>'+
-        //                         '</div>'+
-        //                     '</div>';
-        //
-        //             })
-        //             $('#note-full-container').append(html);
-        //         },
-        //         error : function(e) {
-        //             console.log("ERROR: ", e);
-        //         }
-        //     });
-        // }
     </script>
 </th:block>
 </body>

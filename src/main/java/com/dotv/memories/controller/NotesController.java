@@ -1,5 +1,6 @@
 package com.dotv.memories.controller;
 
+import com.dotv.memories.dto.NotesAllDTO;
 import com.dotv.memories.dto.NotesDTO;
 import com.dotv.memories.entity.Notes;
 import com.dotv.memories.service.NotesService;
@@ -13,20 +14,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
-
 @Controller
 public class NotesController {
     @Autowired
     private NotesService notesService;
 
-    @GetMapping("dn/notes1")
-    public String notes1(){
+    @GetMapping("dn/home")
+    public String home(){
         return "notes/notes";
     }
-//    @GetMapping("dn/notes-detail")
-//    public String notes2(){
-//        return "notes/notes_detail";
-//    }
+
+    @GetMapping("dn/get-all-notes")
+    public ResponseEntity<List<NotesAllDTO>> getAllNoteFilter(@RequestParam int type) throws Exception {
+        return ResponseEntity.ok(notesService.getAllNoteByType(type));
+    }
 
     @GetMapping("dn/notes")
     public String getHtmlNotes(Model model,@RequestParam Boolean status) throws Exception {
