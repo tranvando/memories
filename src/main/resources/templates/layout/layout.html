@@ -15,11 +15,14 @@
     <!-- Additional CSS Files -->
     <link rel="stylesheet" th:href="@{/assets/css/fontawesome.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/templatemo-stand-blog.css}" />
-<!--    <link rel="stylesheet" th:href="@{/assets/css/owl.css}" />-->
+    <link rel="stylesheet" th:href="@{/assets/css/owl.css}" />
 
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/4.0.12/css/froala_editor.pkgd.min.css" integrity="sha512-swYLAOp48FmFyCCC1VYsAGxmZdBU8NLFWEk8x9/R1O8dhZiF0mPnbvcC8q2qUFr9+2YNSzCexP/ouGp94w3+Bw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- upload image -->
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
 
     <th:block th:replace="${cssResources} ?: ~{}"></th:block>
 
@@ -39,7 +42,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/dn/home">Bài viết
+                        <a class="nav-link" href="/dn/home">TBài viết
 <!--                            <span class="sr-only">(current)</span>-->
                         </a>
                     </li>
@@ -99,15 +102,25 @@
 <!--    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>-->
 
 <!-- Additional Scripts -->
-<!--<script th:src="@{/assets/js/custom.js}"></script>-->
-<!--<script th:src="@{/assets/js/owl.js}"></script>-->
-<!--<script th:src="@{/assets/js/slick.js}"></script>-->
-<!--<script th:src="@{/assets/js/isotope.js}"></script>-->
-<!--<script th:src="@{/assets/js/accordions.js}"></script>-->
+<script th:src="@{/assets/js/custom.js}"></script>
+<script th:src="@{/assets/js/owl.js}"></script>
+<script th:src="@{/assets/js/slick.js}"></script>
+<script th:src="@{/assets/js/isotope.js}"></script>
+<script th:src="@{/assets/js/accordions.js}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/4.0.12/js/froala_editor.pkgd.min.js" integrity="sha512-q9VSJN8zA3KQ/Kptc+NJk3XTWcNotr+sC/PncyE/CFGOchXQoaoSvda5Sa8C/oKCH8UioZDGhiGFsGP4ML5NVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!--validation-->
 <script th:src="@{/validation.js}"></script>
+
+
+<!-- include FilePond library -->
+<script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
+<!-- include FilePond plugins -->
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+
+<!-- include FilePond jQuery adapter -->
+<script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
 
 
 <th:block th:replace="${jsResources} ?: ~{}"></th:block>

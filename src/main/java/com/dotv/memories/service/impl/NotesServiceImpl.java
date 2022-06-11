@@ -6,12 +6,20 @@ import com.dotv.memories.dto.NotesDTO;
 import com.dotv.memories.entity.Notes;
 import com.dotv.memories.repository.NotesRepository;
 import com.dotv.memories.service.NotesService;
+import com.google.api.client.http.AbstractInputStreamContent;
+import com.google.api.client.http.ByteArrayContent;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -22,6 +30,10 @@ public class NotesServiceImpl implements NotesService {
     private PjUnitl pjUnitl;
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Autowired
+    private Drive driveService;
+    @Value("${id.folder.images}")
+    private String idFolder;
 
     @Override
     @Transactional
@@ -119,5 +131,53 @@ public class NotesServiceImpl implements NotesService {
             sqlBuilder.append("order by n.show_date desc");
         }
         return namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, BeanPropertyRowMapper.newInstance(NotesAllDTO.class));
+    }
+
+    public File saveFile(String idFolder, MultipartFile fileImage) throws IOException {
+        File newGGDriveFile = new File();
+        List<String> parents = Arrays.asList(idFolder);
+        newGGDriveFile.setParents(parents).setName(fileImage.getOriginalFilename());
+        AbstractInputStreamContent uploadStreamContent = new ByteArrayContent(fileImage.getContentType(),fileImage.getBytes());
+//        FileContent mediaContent = new FileContent("application/vnd.google-apps.file",uploadStreamContent);
+        return driveService.files().create(newGGDriveFile,uploadStreamContent).setFields("id,webViewLink").execute();
+    }
+
+    @Override
+    public List<File> getListFile() throws IOException {
+        //FileList result = driveService.files().list()
+//        .setQ("'root' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false")
+//        .setSpaces("drive").setFields("nextPageToken, files(id, name, parents)")
+//                .setPageToken(pageToken)
+//            .execute();
+
+
+        String pageToken = null;
+        List<File> list = new ArrayList<File>();
+
+        String query ="'1nXi8IhFV8lapbgSlVCxTR7t9aaVVbZ9l' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false";
+
+        do {
+            FileList result = driveService.files().list().setQ(query).setSpaces("drive") //
+                    .setFields("nextPageToken, files(id, name, createdTime, mimeType,webViewLink)")//
+                    .setPageToken(pageToken).execute();
+            for (File file : result.getFiles()) {
+                list.add(file);
+            }
+            pageToken = result.getNextPageToken();
+        } while (pageToken != null);
+        return list;
+    }
+
+    @Override
+    public Boolean uploadImage(MultipartFile[] files) {
+        //File file = driveService.files().get("1zJokmrQrUuOIDX2Cpor99hWGEByluYkk").setFields("*").execute();
+//        driveService.files().export("1zJokmrQrUuOIDX2Cpor99hWGEByluYkk",file.getMimeType()).execute();
+//        OutputStream outputStream = new ByteArrayOutputStream();
+//        driveService.files().get("1zJokmrQrUuOIDX2Cpor99hWGEByluYkk")
+//                .executeMediaAndDownloadTo(outputStream);
+//        driveService.files().export("1zJokmrQrUuOIDX2Cpor99hWGEByluYkk",file.getMimeType()).execute();
+//        driveService.files().delete("1cvZfEAGeODDf02q3_oLqnYgil9Tdqpoc").execute();
+
+        return null;
     }
 }

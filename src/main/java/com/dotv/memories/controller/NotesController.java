@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -90,6 +92,13 @@ public class NotesController {
             result.put("message",Boolean.FALSE);
         }
         return ResponseEntity.ok(result);
+    }
+
+    //upload
+    @GetMapping("dn/upload")
+    public String upload() throws IOException {
+        notesService.getListFile();
+        return "upload/images";
     }
 
 }
