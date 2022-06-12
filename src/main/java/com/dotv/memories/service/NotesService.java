@@ -4,6 +4,7 @@ import com.dotv.memories.dto.NotesAllDTO;
 import com.dotv.memories.dto.NotesDTO;
 import com.dotv.memories.entity.Notes;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ public interface NotesService {
     Boolean updateStatus(int id,Boolean status);
     Boolean showAllNote() throws Exception;
     List<NotesAllDTO> getAllNoteByType(int type) throws Exception;
-    Boolean uploadImage(MultipartFile[] files);
-    List<File> getListFile() throws IOException;
+    Boolean uploadImage(MultipartFile[] files) throws IOException;
+    FileList getListFile() throws IOException;
+    Boolean deleteFile(String id) throws IOException;
 }

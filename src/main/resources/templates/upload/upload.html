@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/layout :: main-fragment(
+                                                ~{:: title},
+                                                ~{:: #css-resources},
+                                                ~{:: #js-resources},
+                                                ~{:: #main-content}
+                                               )}">
+<head>
+  <meta charset="UTF-8">
+  <title>Bài viết</title>
+  <th:block id="css-resources">
+   <style>
+       /*loading*/
+       .loader-div {
+           position: fixed;
+           top: 0;
+           left: 0;
+           /*background-color: #333;*/
+           background-color: rgb(0,0,0,0.6);
+           height: 100vh;
+           width: 100%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           z-index: 100000000000;
+       }
+
+       .loader {
+           position: relative;
+           width: 10vw;
+           height: 5vw;
+           padding: 1.5vw;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+       }
+
+       .loader span {
+           position: absolute;
+           height: 2vw;
+           width: 2vw;
+           border-radius: 50%;
+           background-color: #ff0;
+       }
+
+       .loader span:nth-child(1) {
+           animation: loading-dotsA 2s infinite linear;
+       }
+
+       .loader span:nth-child(2) {
+           animation: loading-dotsB 2s infinite linear;
+       }
+
+       @keyframes loading-dotsA {
+           0% {
+               transform: none;
+           }
+           25% {
+               transform: translateX(2vw);
+           }
+           50% {
+               transform: none;
+           }
+           75% {
+               transform: translateY(2vw);
+           }
+           100% {
+               transform: none;
+           }
+       }
+
+       @keyframes loading-dotsB {
+           0% {
+               transform: none;
+           }
+           25% {
+               transform: translateX(-2vw);
+           }
+           50% {
+               transform: none;
+           }
+           75% {
+               transform: translateY(-2vw);
+           }
+           100% {
+               transform: none;
+           }
+       }
+
+   </style>
+  </th:block>
+</head>
+<body>
+<th:block id="main-content">
+    <div style="display: none" class="loader-div" id="loading-send">
+        <span class="loader">
+            <span></span>
+            <span></span>
+        </span>
+    </div>
+  <br>
+  <br>
+  <section class="blog-posts grid-system">
+    <div class="container">
+      <form method="post" id="addImage" enctype="multipart/form-data">
+          <div class="form-group note-title">
+            <!-- <label>Ảnh</label> -->
+            <input id="file-note" type="file" class="my-pond" name="fileImage[]" multiple/>
+            <button type="button" class="btn btn-success btn-block" onclick="uploadImage()">Tải ảnh</button>
+          </div>
+      </form>
+    </div>
+  </section>
+</th:block>
+<th:block id="js-resources">
+  <script th:inline="javascript">
+    var pond;
+    $(document).ready(function(e){
+      $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+      pond = FilePond.create(
+              document.querySelector('#file-note'), {
+                allowMultiple: true,
+                instantUpload: false,
+                allowProcess: true
+              });
+    });
+
+
+    function uploadImage () {
+      $('#loading-send').show();
+      var form = $('#addImage')[0];
+      var data = new FormData(form);
+      var pondFiles = pond.getFiles();
+      for (var i = 0; i < pondFiles.length; i++) {
+        data.append('fileImage[]', pondFiles[i].file);
+      }
+      $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: "/dn/upload-image",
+        data: data,
+        processData: false, //prevent jQuery from automatically transforming the data into a query string
+        contentType: false,
+        cache: false,
+        // timeout: 600000,
+        success: function (result) {
+          if(result.message==true){
+              $(location).attr('href', "/dn/image");
+          }
+          else{
+              if(result.message==false){
+                  alert("Vui lòng chọn ảnh")
+              }
+              else{
+                  alert("Lỗi hệ thống");
+              }
+          }
+          $('#loading-send').hide();
+        },
+        error: function (e) {
+          $('#loading-send').hide();
+          alert("Lỗi hệ thống");
+          console.log("ERROR : ", e);
+        }
+      });
+    }
+
+
+  </script>
+</th:block>
+</body>
+</html>

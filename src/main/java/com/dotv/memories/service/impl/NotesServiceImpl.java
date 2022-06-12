@@ -133,43 +133,44 @@ public class NotesServiceImpl implements NotesService {
         return namedParameterJdbcTemplate.query(sqlBuilder.toString(), parameters, BeanPropertyRowMapper.newInstance(NotesAllDTO.class));
     }
 
-    public File saveFile(String idFolder, MultipartFile fileImage) throws IOException {
-        File newGGDriveFile = new File();
-        List<String> parents = Arrays.asList(idFolder);
-        newGGDriveFile.setParents(parents).setName(fileImage.getOriginalFilename());
-        AbstractInputStreamContent uploadStreamContent = new ByteArrayContent(fileImage.getContentType(),fileImage.getBytes());
-//        FileContent mediaContent = new FileContent("application/vnd.google-apps.file",uploadStreamContent);
-        return driveService.files().create(newGGDriveFile,uploadStreamContent).setFields("id,webViewLink").execute();
-    }
-
     @Override
-    public List<File> getListFile() throws IOException {
-        //FileList result = driveService.files().list()
-//        .setQ("'root' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false")
-//        .setSpaces("drive").setFields("nextPageToken, files(id, name, parents)")
-//                .setPageToken(pageToken)
-//            .execute();
-
-
+    public FileList getListFile() throws IOException {
         String pageToken = null;
-        List<File> list = new ArrayList<File>();
-
-        String query ="'1nXi8IhFV8lapbgSlVCxTR7t9aaVVbZ9l' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false";
-
+//        List<File> list = new ArrayList<File>();
+        FileList result=null;
+        String query ="'"+idFolder+"' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false";
         do {
-            FileList result = driveService.files().list().setQ(query).setSpaces("drive") //
-                    .setFields("nextPageToken, files(id, name, createdTime, mimeType,webViewLink)")//
+            result = driveService.files().list().setQ(query).setSpaces("drive")
+                    .setFields("nextPageToken, files(id,createdTime)")
+                    .setOrderBy("createdTime desc")
                     .setPageToken(pageToken).execute();
-            for (File file : result.getFiles()) {
-                list.add(file);
-            }
+//            for (File file : result.getFiles()) {
+//                list.add(file);
+//            }
             pageToken = result.getNextPageToken();
         } while (pageToken != null);
-        return list;
+        return result;
     }
 
     @Override
-    public Boolean uploadImage(MultipartFile[] files) {
+    public Boolean deleteFile(String id) throws IOException {
+        driveService.files().delete(id).execute();
+        return true;
+    }
+
+    @Override
+    public Boolean uploadImage(MultipartFile[] files) throws IOException {
+        if(files[0].isEmpty())
+            return false;
+        for(MultipartFile file:files){
+            File newGGDriveFile = new File();
+            List<String> parents = Arrays.asList(idFolder);
+            newGGDriveFile.setParents(parents).setName(file.getOriginalFilename());
+            AbstractInputStreamContent uploadStreamContent = new ByteArrayContent(file.getContentType(),file.getBytes());
+            driveService.files().create(newGGDriveFile,uploadStreamContent).setFields("id").execute();
+        }
+        return true;
+
         //File file = driveService.files().get("1zJokmrQrUuOIDX2Cpor99hWGEByluYkk").setFields("*").execute();
 //        driveService.files().export("1zJokmrQrUuOIDX2Cpor99hWGEByluYkk",file.getMimeType()).execute();
 //        OutputStream outputStream = new ByteArrayOutputStream();
@@ -177,7 +178,5 @@ public class NotesServiceImpl implements NotesService {
 //                .executeMediaAndDownloadTo(outputStream);
 //        driveService.files().export("1zJokmrQrUuOIDX2Cpor99hWGEByluYkk",file.getMimeType()).execute();
 //        driveService.files().delete("1cvZfEAGeODDf02q3_oLqnYgil9Tdqpoc").execute();
-
-        return null;
     }
 }

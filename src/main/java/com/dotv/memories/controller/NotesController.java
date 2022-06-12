@@ -1,5 +1,6 @@
 package com.dotv.memories.controller;
 
+import com.dotv.memories.dto.ImageDTO;
 import com.dotv.memories.dto.NotesAllDTO;
 import com.dotv.memories.dto.NotesDTO;
 import com.dotv.memories.entity.Notes;
@@ -95,10 +96,27 @@ public class NotesController {
     }
 
     //upload
-    @GetMapping("dn/upload")
-    public String upload() throws IOException {
-        notesService.getListFile();
+    @GetMapping("dn/image")
+    public String image(Model model) throws IOException {
+        model.addAttribute("lstImage",notesService.getListFile().getFiles());
         return "upload/images";
+    }
+
+    @GetMapping("dn/upload")
+    public String upload(){
+        return "upload/upload";
+    }
+
+    @PostMapping("dn/upload-image")
+    public ResponseEntity<JSONObject> uploadImage(ImageDTO imageDTO){
+        JSONObject result = new JSONObject();
+        try{
+            result.put("message",notesService.uploadImage(imageDTO.getFileImage()));
+        }
+        catch (Exception e){
+            result.put("message",1);
+        }
+        return ResponseEntity.ok(result);
     }
 
 }
