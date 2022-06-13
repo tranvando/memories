@@ -119,4 +119,16 @@ public class NotesController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("dn/delete-image")
+    public ResponseEntity<JSONObject> deleteImage(String id){
+        JSONObject result = new JSONObject();
+        try{
+            result.put("message",notesService.deleteFile(id));
+        }
+        catch (Exception e){
+            result.put("message",Boolean.FALSE);
+        }
+        return ResponseEntity.ok(result);
+    }
+
 }

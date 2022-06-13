@@ -154,6 +154,10 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public Boolean deleteFile(String id) throws IOException {
+//        File newContent = new File();
+//        newContent.setTrashed(true);
+//        driveService.files().update(id, newContent).execute();
+//        driveService.files().trash(id).execute();
         driveService.files().delete(id).execute();
         return true;
     }

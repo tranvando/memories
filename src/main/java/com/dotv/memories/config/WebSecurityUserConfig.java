@@ -1,17 +1,32 @@
 package com.dotv.memories.config;
 
+import com.dotv.memories.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityUserConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    UserDetailsService userDetailsService;
+
+    @Bean
+    public RememberMeServices rememberMeServices(){
+
+        TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices("remember-me", userDetailsService);
+        rememberMeServices.setCookieName("xxxx");
+        rememberMeServices.setAlwaysRemember(true);
+        rememberMeServices.setTokenValiditySeconds(259200);
+        return rememberMeServices;
+
+    }
 //    @Bean
 //    @Override
 //    public UserDetailsService userDetailsService() {
@@ -54,6 +69,7 @@ public class WebSecurityUserConfig extends WebSecurityConfigurerAdapter {
 //                .logoutSuccessUrl("/login.html")
 //                .logoutSuccessUrl("/check_login")
                 .invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll();
+//                        .and().rememberMe().key("uniqueAndSecret");
 
 
 

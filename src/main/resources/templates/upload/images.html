@@ -10,345 +10,96 @@
   <meta charset="UTF-8">
   <title>Ảnh</title>
   <th:block id="css-resources">
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Reem+Kufi&display=swap");
-
-      html,
-      /*body {*/
-      /*  margin: 0;*/
-      /*  padding: 0;*/
-      /*  background: #fafafa;*/
-      /*  font-family: "Reem Kufi", sans-serif;*/
-      /*  letter-spacing: 0.2px;*/
-      /*  height: 100vh;*/
-      /*  width: 100vw;*/
-      /*  background-color: var(--bg-1);*/
-      /*  position: relative;*/
-      /*  scroll-behavior: smooth;*/
-      /*}*/
-
-      :root {
-        --col-1: #c8ddef;
-        --col-2: #ff3729fc;
-        --bg-1: white;
-      }
-
-      .material-symbols-rounded {
-        font-family: "Material Symbols Rounded";
-        font-weight: normal;
-        font-style: normal;
-        font-size: 18px;
-        /* Preferred icon size */
-        display: inline-block;
-        line-height: 1;
-        text-transform: none;
-        letter-spacing: normal;
-        word-wrap: normal;
-        white-space: nowrap;
-        direction: ltr;
-
-        vertical-align: middle;
-        /* Support for all WebKit browsers. */
-        -webkit-font-smoothing: antialiased;
-        /* Support for Safari and Chrome. */
-        text-rendering: optimizeLegibility;
-
-        /* Support for Firefox. */
-        -moz-osx-font-smoothing: grayscale;
-
-        /* Support for IE. */
-        font-feature-settings: "liga";
-      }
-
-      section {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 2em;
-      }
-
-      .gallery {
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      .gallery .row {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .gallery .row .col {
-        max-width: 24.999%;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-
-      .gallery .row .col .fluid-container {
-        width: 99.9999%;
-        float: left;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        /*padding-left: 10px;*/
-        /*padding-right: 10px;*/
-        margin: 15px 0;
-        user-select: none;
-        transition: all 0.2s ease;
-        display: block;
-      }
-
-      .gallery .row .col .fluid-container {
-        display: block;
-      }
-
-      .gallery .row .col .fluid-container.selected {
-        width: 99.99%;
-        max-width: 99.99%;
-        /* max-width: 49.99%; */
-      }
-
-      @media screen and (max-width: 767px) {
-        .gallery .row .col .fluid-container {
-          width: 99.99%;
-        }
-
-        .gallery .row .col {
-          /* max-width: 49.999%; */
-          max-width: 99.999%;
-        }
-      }
-
-      .gallery .row .col .fluid-container .item {
-        border-radius: 16px;
-        overflow: hidden;
-        cursor: zoom-in;
-        opacity: 0;
-        transition: all 0.4s ease-in-out;
-      }
-
-      .gallery .row .col .fluid-container.inScreen .item {
-        opacity: 1;
-      }
-
-      .gallery .row .col .fluid-container .item .img img {
-        border-radius: 16px;
-        width: 100%;
-        transition: transform 0.2s ease-in-out;
-      }
-
-      .gallery .row .col .fluid-container .item .img {
-        border-radius: 16px;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .gallery .row .col .fluid-container .item .img:hover img {
-        transform: scale(1.2);
-      }
-
-      .gallery .row .col .fluid-container .item .img:before {
-        content: "Open ";
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background-color: rgba(57, 57, 57, 0.385);
-        color: #fafafa;
-        font-size: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.2s ease-in-out;
-        z-index: 1;
-      }
-
-      .gallery .row .col .fluid-container .item .img:hover:before {
-        opacity: 1;
-      }
-
-      .gallery .row .col .fluid-container .item .info {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.2em;
-        box-sizing: border-box;
-        transform: scale(0.9);
-        opacity: 0;
-        transition: all 0.3s ease-in-out;
-      }
-
-      .gallery .row .col .fluid-container .item:hover .info {
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      .gallery .row .col .fluid-container .item .info .title {
-        flex: 1;
-        text-align: center;
-      }
-
-      .overlayed {
-        overflow: hidden !important;
-      }
-
-      .overlay {
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        height: 100%;
-        width: 100%;
-        z-index: 999;
-        background-color: rgba(38, 38, 38, 0.544);
-        display: none;
-      }
-
-      .overlayed .overlay {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        animation: fadeIn 0.3s ease-in-out;
-      }
-
-      .overlay .viewer {
-        box-sizing: border-box;
-        user-select: none;
-        display: flex;
-        justify-content: center;
-        align-items: stretch;
-        flex-direction: column;
-        padding: 60px;
-      }
-
-      .overlay .viewer div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .overlay .viewer div:first-child {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-      }
-
-      .overlay .viewer img {
-        max-height: 80vh;
-        max-width: 80vw;
-        border-radius: 8px;
-      }
-
-      .alt {
-        flex: 1;
-        color: white;
-      }
-
-      .close {
-        float: right;
-        right: 0;
-        border: none;
-        height: 44px;
-        aspect-ratio: 1;
-        border-radius: 100%;
-        margin: 10px;
-        transition: all 0.3s ease;
-      }
-
-      .close:hover {
-        background-color: #fafafa;
-        transform: scale(1.1);
-      }
-
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-        }
-
-        100% {
-          opacity: 1;
-        }
-      }
-
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.9.1/magnific-popup.css">
+   <style>
+     .thumb {
+       margin-bottom: 15px;
+     }
+     .thumb:last-child {
+       margin-bottom: 0;
+     }
+     .thumb
+     figure img {
+         -webkit-transition: .3s ease-in-out;
+         transition: .3s ease-in-out;
+     }
+   </style>
   </th:block>
 </head>
 <body>
 <th:block id="main-content">
   <br>
   <br>
-  <section style="margin-top: 30px;" class="gallery">
-    <div class="row">
-      <h2>
+  <section style="margin-top:90px;" class="container">
+<!--    <h1 class="my-4 text-center text-lg-left">Image Gallery</h1>-->
+    <div class="row gallery" id="lst-image">
 
-      </h2>
-    </div>
-    <div class="row">
-      <th:block th:each="img:${lstImage}">
-        <div class="col">
-          <div class="fluid-container">
-            <div class="item">
-              <div class="img">
-                <img th:src="'https://drive.google.com/uc?id='+${img.id}">
-              </div>
-              <div class="info"><span class="title" th:text="${img.createdTime}"></span></div>
-            </div>
+        <th:block th:each="img:${lstImage}">
+          <div class="col-lg-3 col-md-4 col-xs-6 thumb" id="${img.id}">
+    <!--          th:title="${#temporals.format(img.createdTime, 'dd/MM/yyyy HH:mm')}"-->
+            <a th:id="${img.id}" th:href="'https://drive.google.com/uc?id='+${img.id}">
+              <figure><img class="img-fluid img-thumbnail" th:src="'https://drive.google.com/uc?id='+${img.id}"/></figure>
+            </a>
           </div>
-        </div>
-      </th:block>
+        </th:block>
 
     </div>
+
   </section>
-  <div class="overlay">
-    <div class="viewer">
-      <div>
-        <div class="alt">this image is ... </div>
-        <button class="close"><span class="material-symbols-rounded">x</span></button>
-      </div>
-      <div><img></div>
-    </div>
-  </div>
 </th:block>
 <th:block id="js-resources">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.9.1/jquery.magnific-popup.js"></script>
   <script th:inline="javascript">
-    let items = document.querySelectorAll(".item"),
-            viewer = document.querySelector(".viewer img");
-    document.querySelector(".viewer .close").onclick = () => {
-      document.querySelector("body").classList.toggle("overlayed");
-    };
-    items.forEach((item) => {
-      item.onclick = () => {
-        let content = item.querySelector(".img img");
-        viewer.setAttribute("src", content.getAttribute("src"));
-        document.querySelector(".viewer .alt").innerHTML = item.querySelector(
-                ".title"
-        ).innerHTML;
-        document.querySelector("body").classList.toggle("overlayed");
-      };
-    });
-
-    ["load", "scroll"].forEach((eventName) => {
-      window.addEventListener(eventName, (event) => {
-        document.querySelectorAll(".fluid-container").forEach((item) => {
-          if (isScrolledIntoView(item)) {
-            item.classList.add("inScreen");
-          } else {
-            item.classList.remove("inScreen");
-          }
-        });
+    $(document).ready(function() {
+      $(".gallery").magnificPopup({
+        delegate: "a",
+        type: "image",
+        tLoading: "Loading image #%curr%...",
+        mainClass: "mfp-img-mobile",
+        gallery: {
+          enabled: true,
+          navigateByImgClick: true,
+          preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
+          tCounter: '<span class="mfp-counter">%curr%/%total%</span>'
+        },
+        image: {
+          titleSrc: function(item) {
+              var idImg= item.el.attr('id');
+            // return item.el.attr('id')+'<a style="margin-left:50px;cursor:pointer">Xóa</a>';
+            return '10/02/2020 10:52'+'<a style="margin-left:50px;cursor:pointer" onclick="deleteImg(\'' +idImg+ '\')"><i class="fa fa-lg fa-trash remove-note"></i></a>';
+          },
+          tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
+        }
       });
     });
-    function isScrolledIntoView(el) {
-      let rect = el.getBoundingClientRect();
-      let elemTop = rect.top;
-      let elemBottom = rect.bottom;
-      let isVisible = elemTop >= -300 && elemBottom <= screen.height + 300;
-      return isVisible;
+
+    function deleteImg(id){
+        var result = confirm("Bạn có chắc muốn xóa?");
+        if(result)  {
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/dn/delete-image",
+                data: {
+                    id:id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.message==true){
+                        $.magnificPopup.close();
+                        $('#'+id).remove();
+                    }
+                    if(data.message==false){
+                        alert('Lỗi hệ thống');
+                    }
+                },
+                error: function (e) {
+                    alert('Lỗi hệ thống');
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
     }
-
-
-
   </script>
 </th:block>
 </body>

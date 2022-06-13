@@ -47,8 +47,6 @@ public class PjUnitl {
         return null;
     }
 
-
-
     @Bean
     public Drive getService() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
