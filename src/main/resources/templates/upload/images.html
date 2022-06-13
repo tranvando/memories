@@ -23,6 +23,85 @@
          -webkit-transition: .3s ease-in-out;
          transition: .3s ease-in-out;
      }
+
+   /*  upload*/
+     /*loading*/
+     .loader-div {
+         position: fixed;
+         top: 0;
+         left: 0;
+         /*background-color: #333;*/
+         background-color: rgb(0,0,0,0.6);
+         height: 100vh;
+         width: 100%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         z-index: 100000000000;
+     }
+
+     .loader {
+         position: relative;
+         width: 10vw;
+         height: 5vw;
+         padding: 1.5vw;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+     }
+
+     .loader span {
+         position: absolute;
+         height: 2vw;
+         width: 2vw;
+         border-radius: 50%;
+         background-color: #ff0;
+     }
+
+     .loader span:nth-child(1) {
+         animation: loading-dotsA 2s infinite linear;
+     }
+
+     .loader span:nth-child(2) {
+         animation: loading-dotsB 2s infinite linear;
+     }
+
+     @keyframes loading-dotsA {
+         0% {
+             transform: none;
+         }
+         25% {
+             transform: translateX(2vw);
+         }
+         50% {
+             transform: none;
+         }
+         75% {
+             transform: translateY(2vw);
+         }
+         100% {
+             transform: none;
+         }
+     }
+
+     @keyframes loading-dotsB {
+         0% {
+             transform: none;
+         }
+         25% {
+             transform: translateX(-2vw);
+         }
+         50% {
+             transform: none;
+         }
+         75% {
+             transform: translateY(-2vw);
+         }
+         100% {
+             transform: none;
+         }
+     }
+
    </style>
   </th:block>
 </head>
@@ -30,13 +109,32 @@
 <th:block id="main-content">
   <br>
   <br>
-  <section style="margin-top:90px;" class="container">
+    <div style="display: none" class="loader-div" id="loading-send">
+        <span class="loader">
+            <span></span>
+            <span></span>
+        </span>
+    </div>
+    <br>
+    <br>
+    <section class="blog-posts grid-system" style="margin-top: 40px">
+        <div class="container">
+            <form method="post" id="addImage" enctype="multipart/form-data">
+                <div class="form-group note-title">
+                    <!-- <label>Ảnh</label> -->
+                    <input id="file-note" type="file" class="my-pond" name="fileImage[]" multiple/>
+                    <button type="button" class="btn btn-success btn-block" onclick="uploadImage()">Tải ảnh</button>
+                </div>
+            </form>
+        </div>
+    </section>
+  <section style="margin-top:60px;" class="container">
 <!--    <h1 class="my-4 text-center text-lg-left">Image Gallery</h1>-->
     <div class="row gallery" id="lst-image">
 
         <th:block th:each="img:${lstImage}">
           <div class="col-lg-3 col-md-4 col-xs-6 thumb" id="${img.id}">
-    <!--          th:title="${#temporals.format(img.createdTime, 'dd/MM/yyyy HH:mm')}"-->
+<!--              th:title="${#dates.format(img.createdTime, 'dd-MM-yyyy HH:mm')}"-->
             <a th:id="${img.id}" th:href="'https://drive.google.com/uc?id='+${img.id}">
               <figure><img class="img-fluid img-thumbnail" th:src="'https://drive.google.com/uc?id='+${img.id}"/></figure>
             </a>
@@ -66,7 +164,7 @@
           titleSrc: function(item) {
               var idImg= item.el.attr('id');
             // return item.el.attr('id')+'<a style="margin-left:50px;cursor:pointer">Xóa</a>';
-            return '10/02/2020 10:52'+'<a style="margin-left:50px;cursor:pointer" onclick="deleteImg(\'' +idImg+ '\')"><i class="fa fa-lg fa-trash remove-note"></i></a>';
+            return '10/02/2099 10:52'+'<a style="margin-left:50px;cursor:pointer" onclick="deleteImg(\'' +idImg+ '\')"><i class="fa fa-lg fa-trash remove-note"></i></a>';
           },
           tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
         }
@@ -99,6 +197,58 @@
                 }
             });
         }
+    }
+
+  //  upload
+    var pond;
+    $(document).ready(function(e){
+        $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+        pond = FilePond.create(
+            document.querySelector('#file-note'), {
+                allowMultiple: true,
+                instantUpload: false,
+                allowProcess: true
+            });
+    });
+
+
+    function uploadImage () {
+        $('#loading-send').show();
+        var form = $('#addImage')[0];
+        var data = new FormData(form);
+        var pondFiles = pond.getFiles();
+        for (var i = 0; i < pondFiles.length; i++) {
+            data.append('fileImage[]', pondFiles[i].file);
+        }
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/dn/upload-image",
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            // timeout: 600000,
+            success: function (result) {
+                if(result.message==true){
+                    $(location).attr('href', "/dn/image");
+                }
+                else{
+                    if(result.message==false){
+                        alert("Vui lòng chọn ảnh")
+                    }
+                    else{
+                        alert("Lỗi hệ thống");
+                    }
+                }
+                $('#loading-send').hide();
+            },
+            error: function (e) {
+                $('#loading-send').hide();
+                alert("Lỗi hệ thống");
+                console.log("ERROR : ", e);
+            }
+        });
     }
   </script>
 </th:block>
