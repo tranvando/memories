@@ -122,7 +122,7 @@
             <form method="post" id="addImage" enctype="multipart/form-data">
                 <div class="form-group note-title">
                     <!-- <label>Ảnh</label> -->
-                    <input id="file-note" type="file" class="my-pond" name="fileImage[]" multiple/>
+                    <input id="file-note" type="file" class="my-pond" name="fileImage[]" multiple accept="image/*"/>
                     <button type="button" class="btn btn-success btn-block" onclick="uploadImage()">Tải ảnh</button>
                 </div>
             </form>
@@ -134,8 +134,7 @@
 
         <th:block th:each="img:${lstImage}">
           <div class="col-lg-3 col-md-4 col-xs-6 thumb" id="${img.id}">
-<!--              th:title="${#dates.format(img.createdTime, 'dd-MM-yyyy HH:mm')}"-->
-            <a th:id="${img.id}" th:href="'https://drive.google.com/uc?id='+${img.id}">
+            <a th:id="${img.id}" th:href="'https://drive.google.com/uc?id='+${img.id}" th:title="${img.description}">
               <figure><img class="img-fluid img-thumbnail" th:src="'https://drive.google.com/uc?id='+${img.id}"/></figure>
             </a>
           </div>
@@ -163,8 +162,9 @@
         image: {
           titleSrc: function(item) {
               var idImg= item.el.attr('id');
-            // return item.el.attr('id')+'<a style="margin-left:50px;cursor:pointer">Xóa</a>';
-            return '10/02/2099 10:52'+'<a style="margin-left:50px;cursor:pointer" onclick="deleteImg(\'' +idImg+ '\')"><i class="fa fa-lg fa-trash remove-note"></i></a>';
+              var dateUp=item.el.attr('title');
+            return '<a style="font-size: 13px;cursor:pointer" onclick="deleteImg(\'' +idImg+ '\')"><i class="fa fa-lg fa-trash remove-note"></i></a>'+
+                  '<span style="font-size: 13px;margin-left: 50px">'+dateUp+'</span>';
           },
           tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
         }

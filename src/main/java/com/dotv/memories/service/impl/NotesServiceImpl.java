@@ -141,7 +141,7 @@ public class NotesServiceImpl implements NotesService {
         String query ="'"+idFolder+"' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false";
         do {
             result = driveService.files().list().setQ(query).setSpaces("drive")
-                    .setFields("nextPageToken, files(id,createdTime)")
+                    .setFields("nextPageToken, files(id,description)")
                     .setOrderBy("createdTime desc")
                     .setPageToken(pageToken).execute();
 //            for (File file : result.getFiles()) {
@@ -163,11 +163,12 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public Boolean uploadImage(MultipartFile[] files) throws IOException {
+    public Boolean uploadImage(MultipartFile[] files) throws Exception {
         if(files[0].isEmpty())
             return false;
         for(MultipartFile file:files){
             File newGGDriveFile = new File();
+            newGGDriveFile.setDescription(pjUnitl.getAcc().getFullName()+"|"+pjUnitl.getDateCurr1());
             List<String> parents = Arrays.asList(idFolder);
             newGGDriveFile.setParents(parents).setName(file.getOriginalFilename());
             AbstractInputStreamContent uploadStreamContent = new ByteArrayContent(file.getContentType(),file.getBytes());

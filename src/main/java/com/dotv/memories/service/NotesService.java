@@ -17,7 +17,7 @@ public interface NotesService {
     Boolean updateStatus(int id,Boolean status);
     Boolean showAllNote() throws Exception;
     List<NotesAllDTO> getAllNoteByType(int type) throws Exception;
-    Boolean uploadImage(MultipartFile[] files) throws IOException;
+    Boolean uploadImage(MultipartFile[] files) throws Exception;
     FileList getListFile() throws IOException;
     Boolean deleteFile(String id) throws IOException;
 }

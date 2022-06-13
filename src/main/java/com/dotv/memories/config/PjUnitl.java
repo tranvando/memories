@@ -18,10 +18,13 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @Configuration
 public class PjUnitl {
@@ -37,6 +40,12 @@ public class PjUnitl {
         LocalDateTime now = LocalDateTime.now();
         //System.out.println(dtf.format(now)); //2016-11-16 12:08:43
         return Timestamp.valueOf(dtf.format(now));
+    }
+
+    public String getDateCurr1(){
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     public Account getAcc() throws Exception {
