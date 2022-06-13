@@ -168,7 +168,7 @@ public class NotesServiceImpl implements NotesService {
             return false;
         for(MultipartFile file:files){
             File newGGDriveFile = new File();
-            newGGDriveFile.setDescription(pjUnitl.getAcc().getFullName()+"|"+pjUnitl.getDateCurr1());
+            newGGDriveFile.setDescription(pjUnitl.getAcc().getFullName()+" | "+pjUnitl.getDateCurr1());
             List<String> parents = Arrays.asList(idFolder);
             newGGDriveFile.setParents(parents).setName(file.getOriginalFilename());
             AbstractInputStreamContent uploadStreamContent = new ByteArrayContent(file.getContentType(),file.getBytes());
